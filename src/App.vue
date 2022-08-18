@@ -1,28 +1,35 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <weather-layout></weather-layout>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+  import { mapState } from "vuex";
+  import WeatherLayout from "./layout/WeatherLayout.vue";
+  export default {
+    name: "App",
+    components: {
+      WeatherLayout,
+    },
+    computed: {
+      ...mapState({
+        main_data: (state) => state.weather.weather_data,
+      }),
+    },
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+    watch: {
+      main_data() {
+        if (!this.main_data.weather) {
+          document.body.style.backgroundColor = "#4a99d3";
+          return;
+        }
+        if (this.main_data?.weather?.code >= 800) {
+          document.body.style.backgroundColor = "#4a99d3";
+        } else {
+          document.body.style.backgroundColor = "#0d0d0d";
+        }
+      },
+    },
+  };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
